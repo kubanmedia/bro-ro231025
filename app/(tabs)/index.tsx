@@ -14,13 +14,35 @@ import { Stack } from 'expo-router';
 import { Mic, MicOff, Send, Sparkles } from 'lucide-react-native';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUsage } from '@/contexts/UsageContext';
-import { useBrowserAgent } from '@/services/browserAgent';
 import { voiceService } from '@/services/voiceService';
+import { supabase } from '@/lib/supabase'; // Assuming this was in the original imports
+import { BrowserTask } from '@/types/database'; // Assuming this was in the original imports
+
+// --- START OF FIX: Platform-specific Browser Agent ---
+// 1. Import the original hook
+import { useBrowserAgent } from '@/services/browserAgent';
+
+// 2. Create a mock version for web/Vercel
+const useBrowserAgentWeb = () => ({
+  messages: [],
+  sendMessage: async (message: string) => {
+    console.log('Message sent:', message);
+    Alert.alert('Web Version', 'Browser automation is disabled in this web preview.');
+  }
+});
+
+// 3. Select the correct hook based on the platform
+const useAgent = Platform.OS === 'web' ? useBrowserAgentWeb : useBrowserAgent;
+// --- END OF FIX ---
+
 
 export default function HomeScreen() {
   const { user, isPremium } = useAuth();
   const { canUseTask, incrementUsage, getRemainingTasks, getTimeUntilReset } = useUsage();
-  const { messages, sendMessage } = useBrowserAgent();
+  
+  // --- START OF FIX: Use the platform-selected hook ---
+  const { messages, sendMessage } = useAgent();
+  // --- END OF FIX ---
   
   const [input, setInput] = useState<string>('');
   const [isRecording, setIsRecording] = useState<boolean>(false);
