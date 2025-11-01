@@ -1,11 +1,4 @@
-{
-  "expo": {
-    // ... other existing fields ...
-    "android": {
-      "jsEngine": "jsc"
-    }
-  }
-}
+
 {
   "expo": {
     "name": "Voice-Enabled Browser Automation App",
