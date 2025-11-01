@@ -1,5 +1,13 @@
 {
   "expo": {
+    // ... other existing fields ...
+    "android": {
+      "jsEngine": "jsc"
+    }
+  }
+}
+{
+  "expo": {
     "name": "Voice-Enabled Browser Automation App",
     "slug": "voice-enabled-browser-automation-app",
     "version": "1.0.0",
@@ -24,6 +32,7 @@
       }
     },
     "android": {
+  "jsEngine": "jsc"
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
