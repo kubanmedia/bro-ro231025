@@ -1,0 +1,56 @@
+name: Build Expo Web (export)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-expo-web:
+    runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: "--max_old_space_size=4096"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies (legacy peer deps)
+        run: npm ci --legacy-peer-deps
+
+      - name: Install ajv compatibility (if needed)
+        run: npm i --no-save --legacy-peer-deps ajv@6.12.6 ajv-keywords@3.5.2 || true
+
+      - name: Run Expo export (try general export first)
+        run: |
+          set -e
+          echo "Running: npx expo export"
+          npx expo export || { echo "npx expo export failed, trying npx expo export:web"; npx expo export:web || true; }
+
+      - name: List generated files
+        run: |
+          echo "=== Searching for index.html ==="
+          find . -type f -name 'index.html' -maxdepth 6 -print || true
+          echo "=== ls web-build (if present) ==="
+          ls -la web-build || true
+          echo "=== ls dist/out/public (if present) ==="
+          ls -la dist || true
+          ls -la out || true
+          ls -la public || true
+
+      - name: Upload web output artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: expo-web-export
+          path: |
+            web-build
+            dist
+            out
+            public
+            web
+            build
