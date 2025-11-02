@@ -1,4 +1,3 @@
-
 {
   "expo": {
     "name": "Voice-Enabled Browser Automation App",
@@ -18,22 +17,18 @@
       "supportsTablet": true,
       "bundleIdentifier": "app.rork.voice-enabled-browser-automation-app",
       "infoPlist": {
-        "UIBackgroundModes": [
-          "audio"
-        ],
+        "UIBackgroundModes": ["audio"],
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       }
     },
     "android": {
-
+      "package": "app.rork.voice-enabled-browser-automation-app",
+      "permissions": ["RECORD_AUDIO"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "app.rork.voice-enabled-browser-automation-app",
-      "permissions": [
-        "RECORD_AUDIO"
-      ]
+      "jsEngine": "jsc"
     },
     "web": {
       "favicon": "./assets/images/favicon.png",
